@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseClient } from '@/lib/supabaseServer';
 
 type CommentBody = {
@@ -6,8 +6,8 @@ type CommentBody = {
   comment?: string;
 };
 
-export async function POST(req: Request, context: { params: { id: string } }) {
-  const { id } = context.params;
+export async function POST(req: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const { id } = await context.params;
   const supabase = getSupabaseClient();
 
   let payload: CommentBody = {};
