@@ -25,12 +25,30 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     return NextResponse.json({ error: message }, { status: 500 });
   }
 
-  return NextResponse.json({
+  const response = NextResponse.json({
     id: image.id,
     image_url: image.image_url,
     likes_count: (likesRows || []).length,
     comments: comments || [],
   });
+  
+  // Add CORS headers
+  response.headers.set('Access-Control-Allow-Origin', '*');
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  
+  return response;
+}
+
+export async function OPTIONS() {
+  const response = new NextResponse(null, { status: 200 });
+  
+  // Add CORS headers for preflight requests
+  response.headers.set('Access-Control-Allow-Origin', '*');
+  response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  
+  return response;
 }
 
 
