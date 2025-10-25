@@ -63,14 +63,14 @@ export async function GET(req: NextRequest) {
     });
   }
 
-  const response = (images || []).map((img: any) => ({
+  const responseData = (images || []).map((img: any) => ({
     id: img.id,
     image_url: img.image_url,
     likes_count: likesCountByImage[img.id] || 0,
     comments: commentsByImage[img.id] || [],
   }));
 
-  const response = NextResponse.json({ page, total_pages: MAX_PAGES, data: response });
+  const response = NextResponse.json({ page, total_pages: MAX_PAGES, data: responseData });
   
   // Add CORS headers
   response.headers.set('Access-Control-Allow-Origin', '*');
