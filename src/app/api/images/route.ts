@@ -63,9 +63,13 @@ export async function GET(req: NextRequest) {
     });
   }
 
+  // Get the base URL from the request
+  const { protocol, host } = new URL(req.url);
+  const baseUrl = `${protocol}//${host}`;
+
   const responseData = (images || []).map((img: any) => ({
     id: img.id,
-    image_url: img.image_url,
+    image_url: `${baseUrl}/api/images/proxy?url=${encodeURIComponent(img.image_url)}`,
     likes_count: likesCountByImage[img.id] || 0,
     comments: commentsByImage[img.id] || [],
   }));

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseClient } from '@/lib/supabaseServer';
 
-export async function GET(_req: NextRequest, context: { params: Promise<{ id: string }> }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
   const supabase = getSupabaseClient();
 
@@ -25,9 +25,14 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     return NextResponse.json({ error: message }, { status: 500 });
   }
 
+  // Get the base URL from the request
+  const { protocol, host } = new URL(req.url);
+  const baseUrl = `${protocol}//${host}`;
+  const proxiedImageUrl = `${baseUrl}/api/images/proxy?url=${encodeURIComponent(image.image_url)}`;
+
   const response = NextResponse.json({
     id: image.id,
-    image_url: image.image_url,
+    image_url: proxiedImageUrl,
     likes_count: (likesRows || []).length,
     comments: comments || [],
   });
