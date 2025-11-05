@@ -37,11 +37,106 @@ create table if not exists public.comments (
 ### Seed
 - POST `/api/seed` once to insert up to 200 images (uses Picsum).
 
+### CORS
+All API endpoints have CORS enabled with `Access-Control-Allow-Origin: *`, allowing requests from any origin.
+
 ### Endpoints
-- GET `/api/images?page=1`
-- GET `/api/images/[id]`
-- POST `/api/images/[id]/like`
-- POST `/api/images/[id]/comment` with body `{ commenter_name, comment }`
+
+#### GET `/api/images?page=1`
+Returns paginated list of images with likes and comments.
+
+**Query Parameters:**
+- `page` (optional): Page number (default: 1, max: 20)
+
+**Response:**
+```json
+{
+  "page": 1,
+  "total_pages": 20,
+  "data": [
+    {
+      "id": "uuid",
+      "image_url": "https://your-api.com/api/images/proxy?url=...",
+      "likes_count": 5,
+      "comments": [
+        {
+          "commenter_name": "John",
+          "comment": "Great photo!"
+        }
+      ]
+    }
+  ]
+}
+```
+
+#### GET `/api/images/[id]`
+Returns a specific image with its likes and comments.
+
+**Response:**
+```json
+{
+  "id": "uuid",
+  "image_url": "https://your-api.com/api/images/proxy?url=...",
+  "likes_count": 5,
+  "comments": [
+    {
+      "commenter_name": "John",
+      "comment": "Great photo!"
+    }
+  ]
+}
+```
+
+#### POST `/api/images/[id]/like`
+Adds a like to an image.
+
+**Response:**
+```json
+{
+  "success": true,
+  "likes_count": 6
+}
+```
+
+#### DELETE `/api/images/[id]/like`
+Removes the most recent like from an image.
+
+**Response:**
+```json
+{
+  "success": true,
+  "likes_count": 5
+}
+```
+
+#### POST `/api/images/[id]/comment`
+Adds a comment to an image.
+
+**Request Body:**
+```json
+{
+  "commenter_name": "John",
+  "comment": "Great photo!"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "image_id": "uuid",
+  "comment": {
+    "commenter_name": "John",
+    "comment": "Great photo!"
+  }
+}
+```
+
+#### GET `/api/images/proxy?url=<encoded-url>`
+Proxies external images through the API to avoid CORS issues. Used automatically by the main endpoints.
+
+**Query Parameters:**
+- `url` (required): Encoded URL of the image to proxy
 
 ### Run
 ```

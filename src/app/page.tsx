@@ -54,6 +54,12 @@ export default function Home() {
             </div>
 
             <div>
+              <h3 className="font-semibold">DELETE /api/images/[id]/like</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-300">Removes the most recent like for an image.</p>
+              <pre className="mt-2 rounded bg-gray-100 dark:bg-gray-800 p-3 text-sm overflow-auto text-gray-900 dark:text-gray-100">{`{ "success": true, "likes_count": 5 }`}</pre>
+            </div>
+
+            <div>
               <h3 className="font-semibold">POST /api/images/[id]/comment</h3>
               <p className="text-sm text-gray-600 dark:text-gray-300">Body:</p>
               <pre className="mt-2 rounded bg-gray-100 dark:bg-gray-800 p-3 text-sm overflow-auto text-gray-900 dark:text-gray-100">{`
@@ -85,6 +91,8 @@ export default function Home() {
             <li>Pagination: 10 images per page, up to 20 pages.</li>
             <li>No authentication required.</li>
             <li>Likes and comments persisted in Supabase.</li>
+            <li>CORS enabled for all origins on all endpoints.</li>
+            <li>Images are proxied through /api/images/proxy to handle CORS.</li>
           </ul>
         </div>
       </section>
